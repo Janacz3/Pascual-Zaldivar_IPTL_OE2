@@ -41,10 +41,28 @@
                 <div id="message" class="message"></div>
             </section>
 
+            <section class="product-search">
+                <input type="text" id="searchInput" placeholder="Search for a product...">
+            </section>
+
+            <!-- Add sorting buttons above the product list -->
             <section class="product-display">
                 <h2>Uploaded Products</h2>
+                <button id="sortNameBtn">Sort by Name</button>
+                <button id="sortPriceBtn">Sort by Price</button>
                 <div id="productList" class="product-list"></div>
             </section>
+
+            <!-- Add modal for delete confirmation -->
+            <div id="confirmationModal" class="modal">
+                <div class="modal-content">
+                    <h3>Are you sure you want to delete this product?</h3>
+                    <button id="confirmDeleteBtn">Yes, Delete</button>
+                    <button id="cancelDeleteBtn">Cancel</button>
+                </div>
+            </div>
+
+            
     </main>
 
     <script src="script.js"></script>

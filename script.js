@@ -92,7 +92,6 @@ function editProduct(id) {
         const previewImage = document.querySelector('.image-preview img');
         previewImage ? previewImage.src = product.image : null;
         productImage.files = new DataTransfer().files;
-
         message.textContent = "Edit the product and resubmit.";
         message.style.color = "blue";
         products = products.filter(p => p.id !== id); // Remove the product temporarily for re-upload
@@ -115,3 +114,101 @@ function clearForm() {
     productImage.value = "";
     imagePreview.style.display = 'none';
 }
+
+//File validation for image uploads (check file type and size)
+productImage.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    const fileType = file ? file.type.split('/')[1] : '';
+    const fileSize = file ? file.size / 1024 / 1024 : 0; // MB
+
+    if (file) {
+        if (!['jpg', 'jpeg', 'png'].includes(fileType)) {
+            message.textContent = "Invalid file type! Please upload a JPG, JPEG, OR PNG file.";
+            message.style.color = "red";
+            productImage.value = ''; //Reset file input
+            return;
+        }
+
+        if (fileSize > 5) { //limit to 5MB
+            message.textContent = "File size exceeds 5MB! Please upload a smaller file.";
+            message.style.color = "red";
+            productImage.value = ''; //Reset file input
+            return;
+        }
+
+        //Display image preview if file is valid
+        const reader = new FileReader();
+        reader.onload = function () {
+            imagePreview.innerHTML = `<img src=${reader.result}" alt="Product Image Preview">`;
+            imagePreview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // Sorting products by name or price
+    document.getElementById('sortNameBtn').addEventListener('click', () => {
+        products.sort((a, b) => a.name.localeCompare(b.name));
+        displayProducts();
+    });
+
+    document.getElementById('sortPriceBtn').addEventListener('click', () => {
+        products.sort((a, b) => a.price = b.price);
+        displayProducts();
+    });
+
+    //Search functionality for product name or description
+    const searchInput = document.getElementById('searchInput');
+
+    searchInput.addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredProducts = products.filter(product =>
+            product.name.toLowerCase().includes(searchTerm) ||
+            product.description.toLowerCase().includes(searchTerm)
+        );
+        displayFilteredProducts(filteredProducts);
+    });
+
+    //Display filtered products
+    function displayFilteredProducts(filteredProducts) {
+        productList.innerHTML = '';
+        filteredProducts.forEach(products => {
+            const productItem = document.createElement('div');
+            productItem.classList.add('product-item');
+            prodictItem.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p>${product.price}</p>
+                <button onclick="editProduct(${product.id})">Edit</button>
+                <button onclick="deleteProduct(${product.id})">Delete</button>
+            </div>
+        `;
+        productList.appendChild(productItem);
+        });
+    }
+
+    let productToDelete = null; //Store the product to be deleted
+
+    //Open the modal and confirm delete
+    function openDeleteModal(id) {
+        productToDelete = id;
+        document.getElementById('confirmationModal').style.display = 'flex';
+    }
+
+    //Close the modal
+    document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+        document.getElementById('confirmationModal').style.display = 'none';
+    });
+
+    //Confirm delete action
+    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+        deleteProduct(productToDelete);
+        document.getElementById('confirmationModal').style.display = 'none';
+    });
+
+    function deleteProduct(id) {
+        products = products.filter(p => p.id !== id);
+        displayProducts();
+    }
+});
