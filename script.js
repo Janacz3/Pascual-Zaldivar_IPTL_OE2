@@ -55,26 +55,6 @@ productForm.addEventListener('submit', (e) => {
     message.style.color = "green";
 });
 
-//Display products
-function displayProducts() {
-    productList.innerHTML = '';
-    products.forEach(product => {
-        const productItem = document.createElement('div');
-        productItem.classList.add('product-item');
-        productItem.innerHTML = `
-            <img src="${product.image}" alt="${product.name}">
-            <div class="product-info">
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <p>$${product.price}</p>
-                <button onclick="editProduct(${product.id})">Edit</button>
-                <button onclick="openDeleteModal(${product.id})">Delete</button>
-            </div>
-        `;
-        productList.appendChild(productItem);
-    });
-}
-
 //let editingProduct = null;
 
 function editProduct(id) {
@@ -190,6 +170,32 @@ searchInput.addEventListener('input', (e) => {
     );
     displayFilteredProducts(filteredProducts);
 });
+
+    //Display filtered products
+    function displayFilteredProducts(filteredProducts) {
+        productList.innerHTML = '';
+        filteredProducts.forEach(product => {
+            const productItem = document.createElement('div');
+            productItem.classList.add('product-item');
+            productItem.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <div class="product-info">
+                <h3>Product Name: ${product.name}</h3>
+                <p>Product Description: ${product.description}</p>
+                <p>Product Price: $${product.price}</p>
+                <p>Rating: ${product.rating}</p>
+                <div class="product-rating">
+                    <label for="rating-${product.id}">Rate this product: </label>
+                    <input type="number" id="rating-${product.id}" min="1" max="5" step="1" style="width:95%;"/>
+                    <button onclick="submitRating(${product.id})">Submit Rating</button>
+                </div>
+                <button onclick="editProduct(${product.id})">Edit</button>
+                <button onclick="openDeleteModal(${product.id})">Delete</button>
+            </div>
+        `;
+        productList.appendChild(productItem);
+        });
+    }
 
 //Display products
 function displayProducts() {
