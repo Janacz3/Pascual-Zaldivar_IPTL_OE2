@@ -77,7 +77,7 @@ function displayProducts() {
 
 // Edit product
 function editProduct(id) {
-    const product = product.find(p => p.id === id);
+    const product = products.find(p => p.id === id);
     if (product) {
         productName.value = product.name;
         productDescription.value = product.description;
