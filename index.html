@@ -11,10 +11,18 @@
         <h1>Product Upload</h1>
     </header>
 
+    <section class="product-search">
+            <input type="text" id="searchInput" placeholder="Search for a product...">
+    </section>
+
     <main>
+                
         <section class="upload-form">
             <h2>Upload New Product</h2>
             <form id="productForm">
+
+                
+
                 <div class="form-group">
                     <label for="productName">Product Name: </label>
                     <input type="text" id="productName" placeholder="Enter product name" required>
@@ -41,10 +49,6 @@
                 <div id="message" class="message"></div>
             </section>
 
-            <section class="product-search">
-                <input type="text" id="searchInput" placeholder="Search for a product...">
-            </section>
-
             <!-- Add sorting buttons above the product list -->
             <section class="product-display">
                 <h2>Uploaded Products</h2>
@@ -60,6 +64,13 @@
                     <button id="confirmDeleteBtn">Yes, Delete</button>
                     <button id="cancelDeleteBtn">Cancel</button>
                 </div>
+            </div>
+
+            <!--Add a star rating section in product item-->
+            <div class="product-rating">
+                <label for="rating">Rate this product: </label>
+                <input type="number" id="rating" min="1" max="5" step="1" />
+                <button onclick="submitRating(product.id)">Submit Rating</button>
             </div>
 
             
