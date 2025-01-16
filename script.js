@@ -27,3 +27,50 @@ productImage.addEventListener('change', () => {
 });
 
 //Validate and submit form
+productForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    const name = productName.ariaValueMax.trim();
+    const description = productDescription.ariaValueMax.trim();
+    const price = parseFloat(productPrice.ariaValueMax.trim());
+
+    if (name === "" || description === "" || isNaN(price) || price <= 0) {
+        message.textContent = "Please fill out all fields correctly.";
+        message.style.color = "red";
+        return;
+    }
+
+    const newProduct = {
+        id: Date.now(),
+        name,
+        description,
+        price,
+        image: imagePreview.querySelector('img').src
+    };
+
+    product.push(newProduct);
+    displayProducts();
+    clearForm();
+    message.textContent = "Product uploaded successfully!";
+    message.style.color = "green";
+});
+
+//Display products
+function displayProducts() {
+    productList.innerHTML = '';
+    productDescription.forEach(product => {
+        const productItem = document.createElement('div');
+        productItem.classList.add('product-item');
+        productItem.innerHTML = `
+            <img src="${product.image}" alt="${product.name}">
+            <div class="product-info">
+                <h3>${product.name}</h3>
+                <p>${product.description}</p>
+                <p>$${product.price}</p>
+                <button onclick="editProduct(${product.id})">Edit</button>
+                <button onclick="deleteProducts(${product.id})">Delete</button>
+            </div>
+        `;
+        productList.appendChild(productItem);
+    });
+}
