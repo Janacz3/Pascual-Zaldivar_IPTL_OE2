@@ -11,7 +11,7 @@ const message = document.getElementById('message');
 const productList = document.getElementById('productList');
 
 //Store uploaded products
-let product = [];
+let products = [];
 
 //Show image preview
 productImage.addEventListener('change', () => {
@@ -30,9 +30,9 @@ productImage.addEventListener('change', () => {
 productForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const name = productName.ariaValueMax.trim();
-    const description = productDescription.ariaValueMax.trim();
-    const price = parseFloat(productPrice.ariaValueMax.trim());
+    const name = productName.value.trim();
+    const description = productDescription.value.trim();
+    const price = parseFloat(productPrice.value.trim());
 
     if (name === "" || description === "" || isNaN(price) || price <= 0) {
         message.textContent = "Please fill out all fields correctly.";
@@ -48,7 +48,7 @@ productForm.addEventListener('submit', (e) => {
         image: imagePreview.querySelector('img').src
     };
 
-    product.push(newProduct);
+    products.push(newProduct);
     displayProducts();
     clearForm();
     message.textContent = "Product uploaded successfully!";
@@ -58,7 +58,7 @@ productForm.addEventListener('submit', (e) => {
 //Display products
 function displayProducts() {
     productList.innerHTML = '';
-    productDescription.forEach(product => {
+    products.forEach(product => {
         const productItem = document.createElement('div');
         productItem.classList.add('product-item');
         productItem.innerHTML = `
@@ -68,7 +68,7 @@ function displayProducts() {
                 <p>${product.description}</p>
                 <p>$${product.price}</p>
                 <button onclick="editProduct(${product.id})">Edit</button>
-                <button onclick="deleteProducts(${product.id})">Delete</button>
+                <button onclick="deleteProduct(${product.id})">Delete</button>
             </div>
         `;
         productList.appendChild(productItem);
@@ -101,7 +101,7 @@ function deleteProduct(id) {
 //Clear the form after submission
 function clearForm() {
     productName.value = "";
-    productDescription = "";
+    productDescription.value = "";
     productPrice.value = "";
     productImage.value = "";
     imagePreview.style.display = 'none';
