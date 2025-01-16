@@ -30,9 +30,9 @@ productImage.addEventListener('change', () => {
 productForm.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const name = productName.ariaValueMax.trim();
-    const description = productDescription.ariaValueMax.trim();
-    const price = parseFloat(productPrice.ariaValueMax.trim());
+    const name = productName.value.trim();
+    const description = productDescription.value.trim();
+    const price = parseFloat(productPrice.value.trim());
 
     if (name === "" || description === "" || isNaN(price) || price <= 0) {
         message.textContent = "Please fill out all fields correctly.";
