@@ -163,10 +163,10 @@ productImage.addEventListener('change', (e) => {
     //Display filtered products
     function displayFilteredProducts(filteredProducts) {
         productList.innerHTML = '';
-        filteredProducts.forEach(products => {
+        filteredProducts.forEach(product => {
             const productItem = document.createElement('div');
             productItem.classList.add('product-item');
-            prodictItem.innerHTML = `
+            productItem.innerHTML = `
             <img src="${product.image}" alt="${product.name}">
             <div class="product-info">
                 <h3>${product.name}</h3>
