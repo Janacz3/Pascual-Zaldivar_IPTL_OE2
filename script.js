@@ -45,7 +45,7 @@ productForm.addEventListener('submit', (e) => {
         name,
         description,
         price,
-        image: imagePreview.querySelector('img').src
+        image: imagePreview.querySelector('img') ? imagePreview.querySelector('img').src : ""
     };
 
     products.push(newProduct);
@@ -68,7 +68,7 @@ function displayProducts() {
                 <p>${product.description}</p>
                 <p>$${product.price}</p>
                 <button onclick="editProduct(${product.id})">Edit</button>
-                <button onclick="deleteProduct(${product.id})">Delete</button>
+                <button onclick="openDeleteModal(${product.id})">Delete</button>
             </div>
         `;
         productList.appendChild(productItem);
@@ -86,11 +86,14 @@ function editProduct(id) {
         productDescription.value = product.description;
         productPrice.value = product.price;
 
-        /*imagePreview.innerHTML = `<img src="${product.image}" alt="Product Image Preview">`;
-        imagePreview.style.display = 'block';*/
-
         const previewImage = document.querySelector('.image-preview img');
-        previewImage ? previewImage.src = product.image : null;
+        if (previewImage) {
+            previewImage.src = product.image;
+        } else {
+            imagePreview.innerHTML = `<img src="${product.image}" alt="Product Image Preview">`;
+            imagePreview.style.display = 'block';
+        }
+
         productImage.files = new DataTransfer().files;
         message.textContent = "Edit the product and resubmit.";
         message.style.color = "blue";
@@ -99,6 +102,25 @@ function editProduct(id) {
     }
 }
 
+let productToDelete = null; //Store the product to be deleted
+
+//Open the modal and confirm delete
+function openDeleteModal(id) {
+    productToDelete = id;
+    console.log(`Opening modal to delete product with ID: ${id}`);
+    document.getElementById('confirmationModal').style.display = 'flex';
+}
+
+//Close the modal
+document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
+    document.getElementById('confirmationModal').style.display = 'none';
+});
+
+//Confirm delete action
+document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+    deleteProduct(productToDelete);
+    document.getElementById('confirmationModal').style.display = 'none';
+});
 
 //Delete product
 function deleteProduct(id) {
@@ -139,76 +161,73 @@ productImage.addEventListener('change', (e) => {
         //Display image preview if file is valid
         const reader = new FileReader();
         reader.onload = function () {
-            imagePreview.innerHTML = `<img src=${reader.result}" alt="Product Image Preview">`;
+            imagePreview.innerHTML = `<img src="${reader.result}" alt="Product Image Preview">`;
             imagePreview.style.display = 'block';
         };
         reader.readAsDataURL(file);
     }
+});
 
-    // Sorting products by name or price
-    document.getElementById('sortNameBtn').addEventListener('click', () => {
-        products.sort((a, b) => a.name.localeCompare(b.name));
-        displayProducts();
-    });
+// Sorting products by name or price
+document.getElementById('sortNameBtn').addEventListener('click', () => {
+    products.sort((a, b) => a.name.localeCompare(b.name));
+    displayProducts();
+});
 
-    document.getElementById('sortPriceBtn').addEventListener('click', () => {
-        products.sort((a, b) => a.price = b.price);
-        displayProducts();
-    });
+document.getElementById('sortPriceBtn').addEventListener('click', () => {
+    products.sort((a, b) => a.price - b.price); // Corrected sorting logic
+    displayProducts();
+});
 
-    //Search functionality for product name or description
-    const searchInput = document.getElementById('searchInput');
+//Search functionality for product name or description
+const searchInput = document.getElementById('searchInput');
 
-    searchInput.addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const filteredProducts = products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm) ||
-            product.description.toLowerCase().includes(searchTerm)
-        );
-        displayFilteredProducts(filteredProducts);
-    });
+searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase();
+    const filteredProducts = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm)
+    );
+    displayFilteredProducts(filteredProducts);
+});
 
-    //Display filtered products
-    function displayFilteredProducts(filteredProducts) {
-        productList.innerHTML = '';
-        filteredProducts.forEach(products => {
-            const productItem = document.createElement('div');
-            productItem.classList.add('product-item');
-            prodictItem.innerHTML = `
+//Display products
+function displayProducts() {
+    productList.innerHTML = '';
+    products.forEach(product => {
+        const productItem = document.createElement('div');
+        productItem.classList.add('product-item');
+        productItem.innerHTML = `
             <img src="${product.image}" alt="${product.name}">
             <div class="product-info">
-                <h3>${product.name}</h3>
-                <p>${product.description}</p>
-                <p>${product.price}</p>
+                <h3>Product Name: ${product.name}</h3>
+                <p>Product Description: ${product.description}</p>
+                <p>Product Price: ${product.price}</p>
+                <p>Rating: ${product.rating}</p>
+                <div class="product-rating">
+                    <label for="rating-${product.id}">Rate this product: </label>
+                    <input type="number" id="rating-${product.id}" min="1" max="5" step="1" />
+                    <button onclick="submitRating(${product.id})">Submit Rating</button>
+                </div>
                 <button onclick="editProduct(${product.id})">Edit</button>
-                <button onclick="deleteProduct(${product.id})">Delete</button>
+                <button onclick="openDeleteModal(${product.id})">Delete</button>
             </div>
         `;
         productList.appendChild(productItem);
-        });
-    }
-
-    let productToDelete = null; //Store the product to be deleted
-
-    //Open the modal and confirm delete
-    function openDeleteModal(id) {
-        productToDelete = id;
-        document.getElementById('confirmationModal').style.display = 'flex';
-    }
-
-    //Close the modal
-    document.getElementById('cancelDeleteBtn').addEventListener('click', () => {
-        document.getElementById('confirmationModal').style.display = 'none';
     });
+}
 
-    //Confirm delete action
-    document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
-        deleteProduct(productToDelete);
-        document.getElementById('confirmationModal').style.display = 'none';
-    });
+// Add rating to product
+function submitRating(productId) {
+    const rating = document.getElementById('rating-' + productId).value; // Dynamic ID based on productId
+    const product = products.find(p => p.id === productId);
 
-    function deleteProduct(id) {
-        products = products.filter(p => p.id !== id);
-        displayProducts();
+    if (product && rating >= 1 && rating <= 5) {
+        product.rating = rating;
+        displayProducts(); // Re-render the products after updating the rating
+    } else {
+        alert("Invalid rating value. Please enter a rating between 1 and 5.");
     }
-});
+}
+
+
