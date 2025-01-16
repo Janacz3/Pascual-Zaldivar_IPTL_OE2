@@ -69,7 +69,17 @@ function displayProducts() {
                 <p>$${product.price}</p>
                 <button onclick="editProduct(${product.id})">Edit</button>
                 <button onclick="deleteProduct(${product.id})">Delete</button>
-            </div>
+
+
+            <!-- Rating Section -->
+                <div class="product-rating">
+                    <label for="rating-${product.id}">Rate this product: </label>
+                    <input type="number" id="rating-${product.id}" min="1" max="5" step="1">
+                    <button onclick="submitRating(${product.id})">Submit Rating</button>
+                </div>
+
+                            </div>
+        
         `;
         productList.appendChild(productItem);
     });
@@ -136,6 +146,7 @@ productImage.addEventListener('change', (e) => {
         };
         reader.readAsDataURL(file);
     }
+});
 
     // Sorting products by name or price
     document.getElementById('sortNameBtn').addEventListener('click', () => {
@@ -205,14 +216,14 @@ productImage.addEventListener('change', (e) => {
     }
 
     //Add rating to product
-    function submitRating(productID) {
-        const rating = document.getElementById('rating').value;
-        const product = products.find(p => p.id === productId);
-        if (product && rating >= 1 && rating <=5) {
-            product.rating = rating;
-            displayProducts();
-        } else {
-            alert("Invalid rating value. Please enter a rating between 1 and 5.")
-        }
+function submitRating(productId) {
+    const rating = document.getElementById(`rating-${productId}`).value;
+    const product = products.find(p => p.id === productId);
+    
+    if (product && rating >= 1 && rating <= 5) {
+        product.rating = rating;
+        displayProducts();
+    } else {
+        alert("Invalid rating value. Please enter a rating between 1 and 5.");
     }
-});
+}
