@@ -75,22 +75,31 @@ function displayProducts() {
     });
 }
 
-// Edit product
+//let editingProduct = null;
+
 function editProduct(id) {
     const product = products.find(p => p.id === id);
     if (product) {
+        // Store the product being edited
+        editingProduct = product;
         productName.value = product.name;
         productDescription.value = product.description;
         productPrice.value = product.price;
+
+        /*imagePreview.innerHTML = `<img src="${product.image}" alt="Product Image Preview">`;
+        imagePreview.style.display = 'block';*/
+
         const previewImage = document.querySelector('.image-preview img');
         previewImage ? previewImage.src = product.image : null;
         productImage.files = new DataTransfer().files;
-        message.textContent = "Edit the product anf resubmit.";
+
+        message.textContent = "Edit the product and resubmit.";
         message.style.color = "blue";
-        products = products.filter(p => p.id !==id); //Remove the product temporarily for re-upload
+        products = products.filter(p => p.id !== id); // Remove the product temporarily for re-upload
         displayProducts();
     }
 }
+
 
 //Delete product
 function deleteProduct(id) {
