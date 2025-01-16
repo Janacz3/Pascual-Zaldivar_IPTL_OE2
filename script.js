@@ -202,11 +202,11 @@ function displayProducts() {
             <div class="product-info">
                 <h3>Product Name: ${product.name}</h3>
                 <p>Product Description: ${product.description}</p>
-                <p>Product Price: ${product.price}</p>
+                <p>Product Price: $${product.price}</p>
                 <p>Rating: ${product.rating}</p>
                 <div class="product-rating">
                     <label for="rating-${product.id}">Rate this product: </label>
-                    <input type="number" id="rating-${product.id}" min="1" max="5" step="1" />
+                    <input type="number" id="rating-${product.id}" min="1" max="5" step="1" style="width:95%;"/>
                     <button onclick="submitRating(${product.id})">Submit Rating</button>
                 </div>
                 <button onclick="editProduct(${product.id})">Edit</button>

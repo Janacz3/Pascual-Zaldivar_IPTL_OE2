@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f9f9f9;
+    background-color: #dae0e6;
 }
 
 .header {
@@ -27,6 +27,7 @@ main {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 45%;
     padding-right: 2.5rem;
+    margin-top: 2rem;
 }
 
 h2 {
@@ -103,6 +104,7 @@ button:hover {
     padding: 1.5rem;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 2rem;
 }
 
 .product-list {
@@ -185,3 +187,18 @@ button:hover {
 .modal button:hover {
     background-color: #c0392b;
 }
+
+#searchInput {
+    width: 95%;
+    margin-bottom: 2rem;
+}
+
+#sortNameBtn {
+    margin-bottom: 1rem;
+    background-color:cadetblue
+}
+
+#sortPriceBtn {
+    background-color:cadetblue
+}
+
