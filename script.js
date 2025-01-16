@@ -144,7 +144,7 @@ productImage.addEventListener('change', (e) => {
     });
 
     document.getElementById('sortPriceBtn').addEventListener('click', () => {
-        products.sort((a, b) => a.price = b.price);
+        products.sort((a, b) => a.price - b.price);
         displayProducts();
     });
 
@@ -202,5 +202,17 @@ productImage.addEventListener('change', (e) => {
     function deleteProduct(id) {
         products = products.filter(p => p.id !== id);
         displayProducts();
+    }
+
+    //Add rating to product
+    function submitRating(productID) {
+        const rating = document.getElementById('rating').value;
+        const product = products.find(p => p.id === productId);
+        if (product && rating >= 1 && rating <=5) {
+            product.rating = rating;
+            displayProducts();
+        } else {
+            alert("Invalid rating value. Please enter a rating between 1 and 5.")
+        }
     }
 });
